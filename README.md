@@ -1,0 +1,2 @@
+# claudenewproject
+TESTING SOME APPS FOR MY STARTUP
