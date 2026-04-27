@@ -65,7 +65,7 @@ export const authService = {
     await refreshTokenRepository.rotate(
       stored.id,
       hashToken(newRaw),
-      randomUUID(),
+      stored.familyId,
       new Date(Date.now() + REFRESH_TTL_MS)
     )
 

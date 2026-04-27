@@ -1,8 +1,12 @@
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose'
 import { randomBytes, createHash } from 'crypto'
 
+const jwtSecret = process.env.JWT_SECRET
+if (!jwtSecret && process.env.NODE_ENV === 'production') {
+  throw new Error('JWT_SECRET environment variable is required in production')
+}
 const secret = new TextEncoder().encode(
-  process.env.JWT_SECRET ?? 'dev-secret-change-in-production-min-32-chars!!'
+  jwtSecret ?? 'dev-secret-change-in-production-min-32-chars!!'
 )
 
 export interface AccessTokenPayload extends JWTPayload {
@@ -23,7 +27,7 @@ export async function signAccessToken(
 }
 
 export async function verifyAccessToken(token: string): Promise<AccessTokenPayload> {
-  const { payload } = await jwtVerify(token, secret)
+  const { payload } = await jwtVerify(token, secret, { algorithms: ['HS256'] })
   return payload as AccessTokenPayload
 }
 
